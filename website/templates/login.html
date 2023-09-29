@@ -1,0 +1,44 @@
+<!-- this file extends from the base.html file -->
+{% extends "base.html" %}
+
+<!-- the "title" will change the title-->
+{% block title %} Log In {% endblock %}
+
+<!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+<!-- this is where the "content" goes -->
+{% block content%}
+
+    <!-- Create the login form -->
+    <form method="POST">
+        <h3 align="center">Login</h3>
+
+        <!-- NOTE: the name="email" is important-->
+        <!-- it is used to get the 'email' from the form-->
+        <div class="form-group">
+            <label for="email">Email Address</label>
+            <input
+                type="email"
+                class="form-control"
+                id="email"
+                name="email"
+                placeholder="Enter email"
+            />
+        </div>
+
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input
+                type="password"
+                class="form-control"
+                id="password"
+                name="password"
+                placeholder="Enter password"
+            />
+        </div>
+
+        <br />
+        <button type="submit" class="btn btn-primary">Login</button>
+    </form>
+
+
+{% endblock %}

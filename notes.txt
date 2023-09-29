@@ -1,0 +1,99 @@
+# Project Progress Documentation:
+
+Initial Idea:
+    - I needed to recreate the application because I wanted to host the website. I noticed that 
+      PHP is sort of outdated and it would be difficult to host the website with that language.
+      I wanted to use something more common today, so I decided to use Flask with PHP.
+    - I didn't know how to use Flask so I researched how to make a basic website with it and it 
+      and I learned how to use it. I ended up recreating the MyBudget project using python and Flask.
+
+Tech Used:
+    Python:
+        - main language used with all frameworks
+    Flask (framework):
+        - website framework for python
+        - flask_login (extension)
+    Jinja (framework):
+        - a separate templating framework usually used with Flask
+        - renders templates and its content with "{% block content %} ... {% endblock %}"
+        - can pass variables with "{{ data_used }}"
+    Bootstrap (framework):
+        - website framework for CSS
+    workzeug.security (framework):
+        - extension that helps use with authenticating users
+
+Problems and Solutions:
+    - 
+
+
+# -------------------------------------------------------
+# Setting up the directories:
+1. create the ~/website folder
+2. create the ~/website/static and ~/website/templates folders
+3. create the __init__.py, auth.py, models.py, and views.py folder in ~/MyBudgetV2/website
+4. create the main.py outside ~/MyBudgetV2
+
+# Directories and files explanations:
+    ~/static:
+        holds all javascript code, images, or css files. all files that do not change
+
+    ~/tempates:
+        holds all html code
+
+    __init__.py:
+        this file is the first thing that runs when you launch the application
+
+    auth.py:
+        contains code that routes all the files regarding user authorization
+
+    models.py:
+        used to create our database models
+
+    views.py:
+        used to render template files so they are actual webpages
+
+    main.py:
+        uses a function to create the application
+
+# Things to know with Python and Flask:
+- use the {{}} and write python code inbetween the brackets
+- when using
+
+
+
+# -------------------------------------------------------
+# setting up flask:
+1. install flask:
+    pip install flask
+2. install flask login:
+    pip install flask-login
+3. install flask to use with databases:
+    pip install flask-sqlalchemy
+
+# setting up the app:
+1. in "__init__.py", import flask:
+    from flask import Flask
+2. make the method to create an app object:
+    def create_app():
+        app = Flask("__name__");
+        app.config["SECRET_KEY"] = "123456";
+        return app;
+
+# create website routes:
+1. in "views.py", create the blueprint:
+    from flask import Blueprint
+    views = Blueprint("views", __name__);
+2. in "auth.py", create the blueprint:
+    from flask import Blueprint
+    auth = Blueprint("auth", __name__);
+
+
+# -------------------------------------------------------
+
+
+
+
+
+
+
+
