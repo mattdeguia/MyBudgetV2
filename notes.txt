@@ -1,6 +1,12 @@
+
 # Project Progress Documentation:
 
-Initial Idea:
+Project Overview:
+    - MyBudgetV2 is a website created to help users keep track of their daily expenses
+    - It allows them to view their expenses in different categories, based on price/date/type of expense
+    - They can also view a graph that allows the user to visually see what categories they spend it on most
+
+Project Idea:
     - I needed to recreate the application because I wanted to host the website. I noticed that 
       PHP is sort of outdated and it would be difficult to host the website with that language.
       I wanted to use something more common today, so I decided to use Flask with PHP.
@@ -10,7 +16,7 @@ Initial Idea:
 Tech Used:
     Python:
         - main language used with all frameworks
-    Flask (framework):
+    Flask and extensions (framework):
         - website framework for python
         - flask_login (extension)
     Jinja (framework):
@@ -23,10 +29,31 @@ Tech Used:
         - extension that helps use with authenticating users
 
 Problems and Solutions:
-    - 
+    - ** talk about how when adding functionalities and encountering problems, what did I do to solve them
+    - Flask in general wasn't that difficult to learn. This was my first time using frameworks with web dev, 
+      but I was familiar with the underlying concepts (server/client sides, connecting to databases, querying
+      Databases). What I wasn't familiar with was how Flask organized they're applications in specific
+      Directories, how they used routes to view webpages, and how they implemented python into a web dev
+      environment. It was difficult at first, but I got the hang of it and I can see myself using it more than PHP
+    - Flask wasn't using the "view@route("/home")" route correctly. It was supposed to redirect the user to the 
+      home page. After doing some research, I was able to fix this by removing the "home" from the argument, which
+      allowed me to redirect the user to the home page correctly.
+    - I wanted to add the functionality of displaying user data from the database. I accomplished this by learning
+      how to use SQLAlchemy (the sql methodology of Flask), resulting in allowing me to display the data. It was
+      important because it is how the use is able to see the data.
+
+
+
+
+
+
+
 
 
 # -------------------------------------------------------
+# -------------------------------------------------------
+# My Personal Notes:
+
 # Setting up the directories:
 1. create the ~/website folder
 2. create the ~/website/static and ~/website/templates folders
@@ -55,14 +82,20 @@ Problems and Solutions:
     main.py:
         uses a function to create the application
 
+
+# -------------------------------------------------------
 # Things to know with Python and Flask:
-- use the {{}} and write python code inbetween the brackets
-- when using
+- use the {{}} and write python code in between the brackets
+- querying the flask database in python:
+    - go to the directory of the project
+    - input: export FLASK_APP=main.py
+    - input: flask shell
+    - now you can query the database you've created
 
 
 
 # -------------------------------------------------------
-# setting up flask:
+# Setting up flask:
 1. install flask:
     pip install flask
 2. install flask login:
@@ -70,7 +103,7 @@ Problems and Solutions:
 3. install flask to use with databases:
     pip install flask-sqlalchemy
 
-# setting up the app:
+# Setting up the app:
 1. in "__init__.py", import flask:
     from flask import Flask
 2. make the method to create an app object:
@@ -79,16 +112,13 @@ Problems and Solutions:
         app.config["SECRET_KEY"] = "123456";
         return app;
 
-# create website routes:
+# Create website routes:
 1. in "views.py", create the blueprint:
     from flask import Blueprint
     views = Blueprint("views", __name__);
 2. in "auth.py", create the blueprint:
     from flask import Blueprint
     auth = Blueprint("auth", __name__);
-
-
-# -------------------------------------------------------
 
 
 

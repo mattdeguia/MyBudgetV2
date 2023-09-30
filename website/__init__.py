@@ -39,7 +39,7 @@ def create_app():
 
     # +++++++++++++++++++++++++++++++++++++++++++++++ 
     # 3d. import the entities from "models.py"
-    from .models import User, Note;
+    from .models import User, Expense;
 
     # The app.app_context() function call creates a context manager that allows you 
     # to run code within the context of your Flask application

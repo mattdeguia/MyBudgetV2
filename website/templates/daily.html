@@ -1,0 +1,49 @@
+<!-- extend the base template and change title of page -->
+{% extends "base.html" %}
+{% block title %} Daily {% endblock %}
+
+<!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+<!-- this is where the "content" goes -->
+{% block content%}
+
+    <form method="POST"><br>
+
+        <h3 align="center">How Much Did You Spend Today?</h3>
+
+        <div class="form-group">
+            <label for="daily_input">Input Money Spent:</label>
+            <input
+                type="text"
+                class="form-control"
+                id="money_spent"
+                name="money"
+                placeholder="Enter amount here..."
+            />
+        </div>
+
+        <div class="form-group">
+            <label for="category">Category:</label>
+            <select
+                class="form-control"
+                id="category"
+                name="category"
+            >
+                <option value="" selected disabled>Select a category...</option>
+                <option value="gas" name="gas">Gas</option>
+                <option value="car_stuff">Car Stuff</option>
+                <option value="streaming">Streaming Services</option>
+                <option value="rent">Rent</option>
+                <option value="utilities">Utilities</option>
+                <option value="internet">Internet</option>
+                <option value="groceries">Groceries</option>
+                <option value="food_and_drinks">Food and Drinks</option>
+                <option value="other_ne">Other (Necessary Expense)</option>
+                <option value="other_ttm">Other (To Treat Myself)</option>
+                <option value="other_ttop">Other (To Treat Other People)</option>
+            </select>
+        </div>
+
+        <br>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+{% endblock %}

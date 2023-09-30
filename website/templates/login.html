@@ -1,19 +1,14 @@
-<!-- this file extends from the base.html file -->
+<!-- extend the base template and change title of page -->
 {% extends "base.html" %}
-
-<!-- the "title" will change the title-->
 {% block title %} Log In {% endblock %}
 
 <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
-<!-- this is where the "content" goes -->
 {% block content%}
 
     <!-- Create the login form -->
     <form method="POST">
         <h3 align="center">Login</h3>
-
-        <!-- NOTE: the name="email" is important-->
-        <!-- it is used to get the 'email' from the form-->
+        <!-- NOTE: in name="email" it's used to get 'email' from the form -->
         <div class="form-group">
             <label for="email">Email Address</label>
             <input
@@ -40,5 +35,8 @@
         <button type="submit" class="btn btn-primary">Login</button>
     </form>
 
+    <br>
+    <br>account: test@test.com, 0000000
+    <br>account: mattdeguia.work@gmail.com, 0000000
 
 {% endblock %}

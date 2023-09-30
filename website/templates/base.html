@@ -1,6 +1,4 @@
-<!-- The file is a template -->
-<!-- This template gets overriden with other templates -->
-
+<!-- The file is a template, which gets overriden with other templates -->
 <!DOCTYPE html>
 <html>
 <head>
@@ -32,69 +30,63 @@
 
 <body>
     <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
-    <!-- create the nav bar -->
+    <!-- NAV BAR -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <!-- put some buttons on the nav bar -->
+
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar">
             <span class="navbar-toggler-icon"></span>
         </button>
 
         <!-- create the items in the nav bar -->
-        <!-- the class is part of the bootstrap css stylesheet -->
-        <!-- the "id='navbar'" connects us to the "data-target='#navbar'" from the button -->
+        <!-- NOTE: the "id='navbar'" connects us to the "data-target='#navbar'" from the button -->
         <div class="collapse navbar-collapse" id="navbar">
             <div class="navbar-nav">
 
                 <!-- show these links if user is logged in -->
+                <!-- NOTE: the "href" attribute is what links the flask "routes" -->
+                <!-- Ex) href="/" connects to the "@views.route("/")" decorator in "views.py", which connectes to the root of the URL, in this case it's  "home.html" file -->
                 {% if user.is_authenticated %}
                 <a class="nav-item nav-link" id="home" href="/">Home</a>
+                <a class="nav-item nav-link" id="daily" href="/daily">Daily</a>
+                <a class="nav-item nav-link" id="overall" href="/overall">Overall</a>
+                <a class="nav-item nav-link" id="category" href="/cat">Category</a>
                 <a class="nav-item nav-link" id="logout" href="/logout">Logout</a>
 
                 <!-- show these links if user is NOT logged in -->
-                {% else: %}
+                {% else %}
+                <a class="nav-item nav-link" id="home" href="/">Home</a>
                 <a class="nav-item nav-link" id="login" href="/login">Login</a>
-                <a class="nav-item nav-link" id="signUp" href="/sign-up">Sign Up</a>
+                <a class="nav-item nav-link" id="signUp" href="/sign_up">Sign Up</a>
 
                 <!-- end the if statement -->
                 {% endif %}
             </div>
         </div>
-
     </nav>
 
     <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
-    <!-- get the messages from flash -->
-    <!-- the "with" is a built-in fuction within Flask/Jinja -->
+    <!-- display different messages based on the category -->
     {% with messages = get_flashed_messages(with_categories=true) %}
-
-        <!-- if statement in Jinja -->
         {% if messages %}
-
-            <!-- for loop in jinja -->
             {% for category, message in messages %}
 
-                <!-- show if message is an "error", which is based on the flash category -->
                 {% if category == "error" %}
                     <div class="alert alert-danger alter-dismissable fade show" role="alert">
-                        <!-- display the message-->
                         {{ message }}
-                        <!-- create a button to exit the flash message -->
                         <button type="button" class="close" data-dismiss="alert">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
 
-                <!-- show if message is "success", which is based on the flash category -->
                 {% elif category == "success" %}
                     <div class="alert alert-success alter-dismissable fade show" role="alert">
-                        <!-- display the message-->
                         {{ message }}
-                        <!-- create a button to exit the flash message -->
                         <button type="button" class="close" data-dismiss="alert">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                 {% endif %}
+                
             {% endfor %}
         {% endif %}
     {% endwith %}
@@ -106,6 +98,22 @@
     <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
     <!-- this content will be changed within other templates -->
     {% block content %} placeholder {% endblock%}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -1,14 +1,11 @@
-<!-- this file extends from the base.html file -->
+<!-- extend the base template and change title of page -->
 {% extends "base.html" %}
-
-<!-- the "title" will change the title-->
 {% block title %} Sign Up {% endblock %}
 
 <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
-<!-- this is where the "content" goes -->
 {% block content%}
 
-    <!-- Create the sign up form -->
+    <!-- SIGN UP form -->
     <form method="POST">
         <h3 align="center">Sign Up</h3>
 
@@ -56,7 +53,7 @@
             />
         </div>
 
-        <br />
+        <br/>
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>
 

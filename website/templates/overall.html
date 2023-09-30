@@ -1,0 +1,16 @@
+<!-- extend the base template and change title of page -->
+{% extends "base.html" %}
+{% block title %} Overall {% endblock %}
+
+<!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+{% block content %}
+
+    <h1 align="center">All Money Spent:</h1>
+    <ul>
+        {% for each_expense in expenses %}
+            <li> price: ${{ each_expense.price }} | category: {{ each_expense.category }} | date: {{ each_expense.trackDate }} </li>
+        {% endfor %}
+    </ul>
+    
+{% endblock %}
+

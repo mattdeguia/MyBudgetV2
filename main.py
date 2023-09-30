@@ -1,10 +1,7 @@
-# from the ~/website/__init__.py folder, import the create_app function
+# import the class to create the actual app
 from website import create_app
-
-# get the create_app() function in __init__.py, and use that to create the application
 app = create_app();
 
-# main file
+# run the application
 if __name__ == "__main__":
-    # run the application, allow debugging
     app.run(debug=True);
