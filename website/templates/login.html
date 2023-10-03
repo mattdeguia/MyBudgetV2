@@ -6,8 +6,11 @@
 {% block content%}
 
     <!-- Create the login form -->
+    <div class="centered-form">
+    <div class="form-container">
     <form method="POST">
         <h3 align="center">Login</h3>
+        <!-- email -->
         <!-- NOTE: in name="email" it's used to get 'email' from the form -->
         <div class="form-group">
             <label for="email">Email Address</label>
@@ -19,7 +22,8 @@
                 placeholder="Enter email"
             />
         </div>
-
+        <br>
+        <!-- pw -->
         <div class="form-group">
             <label for="password">Password</label>
             <input
@@ -30,13 +34,17 @@
                 placeholder="Enter password"
             />
         </div>
-
-        <br />
+        <br>
+        <br>
+        <!-- button -->
         <button type="submit" class="btn btn-primary">Login</button>
     </form>
+    </div>
+    </div>
 
     <br>
-    <br>account: test@test.com, 0000000
-    <br>account: mattdeguia.work@gmail.com, 0000000
+    <h4 align="center">Accounts: </h4>
+    <p align="center">test@test.com, 0000000</p>
+    <p align="center">mattdeguia.work@gmail.com, 0000000</p>
 
 {% endblock %}

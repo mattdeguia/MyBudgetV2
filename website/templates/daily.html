@@ -6,28 +6,19 @@
 <!-- this is where the "content" goes -->
 {% block content%}
 
-    <form method="POST"><br>
+    <br>
+    <h3 align="center">How Much Did You Spend Today?</h3>
 
-        <h3 align="center">How Much Did You Spend Today?</h3>
-
-        <div class="form-group">
+    <div class="centered-form">
+    <div class="form-container">
+        <form method="POST"><br>
+            <!-- first input -->
             <label for="daily_input">Input Money Spent:</label>
-            <input
-                type="text"
-                class="form-control"
-                id="money_spent"
-                name="money"
-                placeholder="Enter amount here..."
-            />
-        </div>
-
-        <div class="form-group">
+            <input type="text" class="form-control" id="money_spent" name="money" placeholder="Enter amount here..."/>
+            <br>
+            <!-- second input-->
             <label for="category">Category:</label>
-            <select
-                class="form-control"
-                id="category"
-                name="category"
-            >
+            <select class="form-control" id="category" name="category">
                 <option value="" selected disabled>Select a category...</option>
                 <option value="gas">Gas</option>
                 <option value="car_stuff">Car Stuff</option>
@@ -41,9 +32,12 @@
                 <option value="other_ttm">Other (To Treat Myself)</option>
                 <option value="other_ttop">Other (To Treat Other People)</option>
             </select>
-        </div>
+            <br>
+            <!-- button -->
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+    </div>
 
-        <br>
-        <button type="submit" class="btn btn-primary">Submit</button>
-    </form>
+    
 {% endblock %}

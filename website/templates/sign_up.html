@@ -6,9 +6,11 @@
 {% block content%}
 
     <!-- SIGN UP form -->
+    <div class="centered-form">
+    <div class="form-container">
     <form method="POST">
         <h3 align="center">Sign Up</h3>
-
+        <!-- email -->
         <div class="form-group">
             <label for="email">Email Address</label>
             <input
@@ -19,7 +21,8 @@
                 placeholder="Enter email"
             />
         </div>
-
+        <br>
+        <!-- name -->
         <div class="form-group">
             <label for="firstName">First Name</label>
             <input
@@ -30,7 +33,8 @@
                 placeholder="Enter first name"
             />
         </div>
-
+        <br>
+        <!-- pw1 -->
         <div class="form-group">
             <label for="password1">Password</label>
             <input
@@ -41,7 +45,8 @@
                 placeholder="Enter password"
             />
         </div>
-
+        <br>
+        <!-- pw2 -->
         <div class="form-group">
             <label for="password2">Password (Confirm)</label>
             <input
@@ -52,9 +57,12 @@
                 placeholder="Confirm password"
             />
         </div>
-
-        <br/>
+        <br>
+        <br>
+        <!-- button -->
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>
+    </div>
+    </div>
 
 {% endblock %}

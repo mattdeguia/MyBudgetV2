@@ -11,7 +11,6 @@ class Expense(db.Model):
     price = db.Column(db.Integer);
     category = db.Column(db.String(150));                                      
     trackDate = db.Column(db.Date, default=date.today());  # year-month-day 
-                                                           # 2023-09-30
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"));           
 
     

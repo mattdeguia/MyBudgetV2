@@ -8,6 +8,7 @@ from wtforms.validators import DataRequired, NumberRange
 from . import db;
 from .models import User, Expense;
 from datetime import datetime, timedelta;
+from sqlalchemy import and_
 
 
 # store blueprints of this file into the "views" object
@@ -55,60 +56,101 @@ def daily():
 @views.route('/overall', methods=["GET", "POST"])
 @login_required
 def overall():
-    if (request.method == "POST"):
-        # if user didn't choose options from drop-down menu's, flash message and go back
+    # automatically set this variable to nothing
+    db_user_expenses = [None];
 
-        # if they did, get drop-down menu values from the user
+    if (request.method == "POST"):
+        # get options from user
         form_option_date = request.form.get("date_filter");
         form_option_category = request.form.get("category_filter")
-
-        # --------------------------------------------------------
-        # show expenses from all time, from all categories
-        if (form_option_date == "all" and form_option_category == "all"):
-            db_user_expenses = Expense.query.filter_by(user_id=current_user.id);
-            return render_template("overall.html", user=current_user, expenses=db_user_expenses);
-        # show expenses from all time, and from a specific category
-        elif (form_option_date == "all" and form_option_category != "all"):
-            db_user_expenses = Expense.query.filter_by(category=form_option_category, user_id=current_user.id);
-            return render_template("overall.html", user=current_user, expenses=db_user_expenses);
         
-        # --------------------------------------------------------
-        # ******************* NOTE: CONTINUE HERE ******************************
-        # show expenses from the current week, from all categories
-        if (form_option_date == "week" and form_option_category == "all"):
-            # get current week in python
+        # if user didn't choose options from drop-down menu's, flash message
+        if (form_option_date == None and form_option_category == None):
+            flash("Please choose options!", category="error");
+            return render_template("overall.html", user=current_user);
+    
+        # if they did, get drop-down menu values from the user
+        else:
+            # get date values
             current_date = datetime.now();
 
-            # Calculate the start and end date of the current week
+            # week variables
             start_of_week = current_date - timedelta(days=current_date.weekday() + 1)
             end_of_week = start_of_week + timedelta(days=6)
+            start_week = start_of_week.strftime("%Y-%m-%d");
+            end_week = end_of_week.strftime("%Y-%m-%d");
 
-            # Filter the start and end dates in a Year-month-day format
-            start = start_of_week.strftime("%Y-%m-%d");
-            end = end_of_week.strftime("%Y-%m-%d");
+            # month variables
+            start_of_month = current_date.replace(day=1)
+            end_of_month = (start_of_month + timedelta(days=32)).replace(day=1) - timedelta(days=1)
+            start_month = start_of_month.strftime("%Y-%m-%d");
+            end_month = end_of_month.strftime("%Y-%m-%d");
 
-            # query trackDate to only return all expenses from the current week
-            db_user_expenses = Expense.query.filter_by(category=form_option_category, user_id=current_user.id).filter(and_(Expense.trackDate>=start, Expense.trackDate<=end));
-            return render_template("overall.html", user=current_user, expenses=db_user_expenses);
-        # show expenses from the current week, from a specific categories
-        elif (form_option_date == "week" and form_option_category != "all"):
-            # get current week in python
-            # query trackDate to only return all expenses from the current week and from a specific category (form_option_category)
-            pass;
+            # year variables
+            start_of_year = current_date.replace(month=1, day=1)
+            end_of_year = current_date.replace(month=12, day=31)
+            start_year = start_of_year.strftime("%Y-%m-%d");
+            end_year = end_of_year.strftime("%Y-%m-%d");
 
-        # --------------------------------------------------------
-        # show expenses from the current month, from all categories
-        if (form_option_date == "month" and form_option_category == "all"):
-            pass;
-        # show expenses from the current month, from a specific categories
-        elif (form_option_date == "month" and form_option_category != "all"):
-            pass;
+
+
+
+            # --------------------------------------------------------
+            # show expenses from all time, from all categories
+            if (form_option_date == "all" and form_option_category == "all"):
+                db_user_expenses = Expense.query.filter_by(user_id=current_user.id);
+                return render_template("overall.html", user=current_user, expenses=db_user_expenses);
         
-        # --------------------------------------------------------
-        # show expenses from the current year, from all categories
-        if (form_option_date == "year" and form_option_category == "all"):
-            pass;
-        # show expenses from the current year, from a specific categories
-        elif (form_option_date == "year" and form_option_category != "all"):
-            pass;
-    return render_template("overall.html", user=current_user);
+            # show expenses from all time, and from a specific category
+            elif (form_option_date == "all" and form_option_category != "all"):
+                db_user_expenses = Expense.query.filter_by(category=form_option_category, user_id=current_user.id);
+                return render_template("overall.html", user=current_user, expenses=db_user_expenses);
+            
+
+
+
+
+            # --------------------------------------------------------
+            # show expenses from the current week, from all categories
+            if (form_option_date == "week" and form_option_category == "all"):
+                db_user_expenses = Expense.query.filter(and_(Expense.trackDate >= start_week, Expense.trackDate <= end_week, Expense.user_id == current_user.id)).all();
+                return render_template("overall.html", user=current_user, expenses=db_user_expenses);
+        
+            # show expenses from the current week, from a specific categories
+            elif (form_option_date == "week" and form_option_category != "all"):
+                db_user_expenses = Expense.query.filter(and_(Expense.category == form_option_category, Expense.trackDate >= start_week, Expense.trackDate <= end_week, Expense.user_id == current_user.id)).all();
+                return render_template("overall.html", user=current_user, expenses=db_user_expenses);
+
+
+
+
+
+
+            # --------------------------------------------------------
+            # show expenses from the current month, from all categories
+            if (form_option_date == "month" and form_option_category == "all"):
+                db_user_expenses = Expense.query.filter(and_(Expense.trackDate >= start_month, Expense.trackDate <= end_month, Expense.user_id == current_user.id)).all();
+                return render_template("overall.html", user=current_user, expenses=db_user_expenses);
+        
+            # show expenses from the current month, from a specific categories
+            elif (form_option_date == "month" and form_option_category != "all"):
+                db_user_expenses = Expense.query.filter(and_(Expense.category == form_option_category, Expense.trackDate >= start_month, Expense.trackDate <= end_month, Expense.user_id == current_user.id)).all();
+                return render_template("overall.html", user=current_user, expenses=db_user_expenses);
+            
+
+
+
+
+
+            # --------------------------------------------------------
+            # show expenses from the current year, from all categories
+            if (form_option_date == "year" and form_option_category == "all"):
+                db_user_expenses = Expense.query.filter(and_(Expense.trackDate >= start_year, Expense.trackDate <= end_year, Expense.user_id == current_user.id)).all();
+                return render_template("overall.html", user=current_user, expenses=db_user_expenses);
+        
+            # show expenses from the current year, from a specific categories
+            elif (form_option_date == "year" and form_option_category != "all"):
+                db_user_expenses = Expense.query.filter(and_(Expense.category == form_option_category, Expense.trackDate >= start_year, Expense.trackDate <= end_year, Expense.user_id == current_user.id)).all();
+                return render_template("overall.html", user=current_user, expenses=db_user_expenses);
+
+    return render_template("overall.html", user=current_user, expenses=db_user_expenses);

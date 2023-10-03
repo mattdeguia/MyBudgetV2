@@ -1,8 +1,9 @@
-# ------------------------------------------------------------------------------
 # 1. import all necessary frameworks/extensions
 from flask import Flask                         # import flask module
-from flask_sqlalchemy import SQLAlchemy         # import database module
 from flask_login import LoginManager;           # the "LoginManage" class helps us manage all the user login related thing
+from flask_sqlalchemy import SQLAlchemy         # import database module
+
+
 
 # ------------------------------------------------------------------------------
 # 2. create database object
@@ -15,10 +16,8 @@ DB_NAME = "database.db";
 def create_app():       
     # +++++++++++++++++++++++++++++++++++++++++++++++                                        
     # 3a. create a Flask object
-    app = Flask(__name__);                                      # __name__ is automaticaly the name of the project
-    app.config["SECRET_KEY"] = "123456";                        # this is the secret password for the website
-
-
+    app = Flask(__name__);                                          # __name__ is automaticaly the name of the project
+    app.config["SECRET_KEY"] = "123456";                            # this is the secret password for the website
 
 
     # +++++++++++++++++++++++++++++++++++++++++++++++ 
