@@ -1,17 +1,13 @@
-
 # ------------------------------------------------------------------------------
 # 1. import all necessary frameworks/extensions
 from flask import Flask                         # import flask module
 from flask_sqlalchemy import SQLAlchemy         # import database module
-from flask_login import LoginManager;           # the "LoginManage" class helps us manage all the user login related things
-
+from flask_login import LoginManager;           # the "LoginManage" class helps us manage all the user login related thing
 
 # ------------------------------------------------------------------------------
 # 2. create database object
 db = SQLAlchemy();
 DB_NAME = "database.db";
-
-
 
 # ------------------------------------------------------------------------------
 # 3. create the application
@@ -22,11 +18,17 @@ def create_app():
     app = Flask(__name__);                                      # __name__ is automaticaly the name of the project
     app.config["SECRET_KEY"] = "123456";                        # this is the secret password for the website
 
+
+
+
     # +++++++++++++++++++++++++++++++++++++++++++++++ 
     # 3b. connect database to application
     # this is the location of our database
     app.config['SQLALCHEMY_DATABASE_URI'] = f"sqlite:///{DB_NAME}";       # this stores the database in the ~/website folder
     db.init_app(app);                                                     # initialize our database for our app
+
+
+
 
     # +++++++++++++++++++++++++++++++++++++++++++++++ 
     # 3c. Import adn register the blueprints (aka routes aka webpages) from "views.py" and "auth.py"
@@ -36,6 +38,11 @@ def create_app():
     from .auth import auth
     app.register_blueprint(views, url_prefix="/");
     app.register_blueprint(auth, url_prefix="/");
+
+
+
+
+
 
     # +++++++++++++++++++++++++++++++++++++++++++++++ 
     # 3d. import the entities from "models.py"
@@ -47,6 +54,8 @@ def create_app():
         # the "create_()" examines your model classes and creates the corresponding 
         # database tables, columns, and relationships.
         db.create_all()
+
+
 
     # +++++++++++++++++++++++++++++++++++++++++++++++
     # 3e. create a LoginManager() object to manage the session

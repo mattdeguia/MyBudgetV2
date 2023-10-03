@@ -5,12 +5,58 @@
 <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
 {% block content %}
 
-    <h1 align="center">All Money Spent:</h1>
-    <ul>
-        {% for each_expense in expenses %}
-            <li> price: ${{ each_expense.price }} | category: {{ each_expense.category }} | date: {{ each_expense.trackDate }} </li>
-        {% endfor %}
-    </ul>
+    <h1 align="center">View Money Spent:</h1>
+
+    <!-- table that displays user expenses -->
+    <table align="center">
+        <thead>
+            <tr>
+                <th>Price:</th>
+                <th>Category:</th>
+                <th>Date:</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for each_expense in expenses %}
+                <tr>
+                    <td> ${{ each_expense.price }}     </td>
+                    <td>  {{ each_expense.category }}  </td>
+                    <td>  {{ each_expense.trackDate }} </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <form method="POST">
+        <!-- drop down menu, ask user what date to view -->
+        <label for="date_filter">Select Date:</label>
+        <select id="date_filter" name="date_filter">
+            <option value="" selected disabled>select a date...</option>
+            <option value="all">All Time</option>
+            <option value="week">This Week</option>
+            <option value="month">This Month</option>
+            <option value="year">This Year</option>
+        </select>
+        <!-- drop down menu, ask user what category to view -->
+        <label for="category_filter">Select Category:</label>
+        <select id="category_filter" name="category_filter">
+            <option value="" selected disabled>Select a category...</option>
+            <option value="all">All</option>
+            <option value="gas">Gas</option>
+            <option value="car_stuff">Car Stuff</option>
+            <option value="streaming">Streaming Services</option>
+            <option value="rent">Rent</option>
+            <option value="utilities">Utilities</option>
+            <option value="internet">Internet</option>
+            <option value="groceries">Groceries</option>
+            <option value="food_and_drinks">Food and Drinks</option>
+            <option value="other_ne">Other (Necessary Expense)</option>
+            <option value="other_ttm">Other (To Treat Myself)</option>
+            <option value="other_ttop">Other (To Treat Other People)</option>
+        </select>
+        <button type="submit">Submit</button>
+    </form>
     
 {% endblock %}
 

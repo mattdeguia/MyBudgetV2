@@ -2,13 +2,16 @@
 from . import db;
 from flask_login import UserMixin;
 from sqlalchemy.sql import func
+from datetime import date;
+
 
 # define a schema for our "Expense" entity
 class Expense(db.Model):
     id = db.Column(db.Integer, primary_key=True);
     price = db.Column(db.Integer);
     category = db.Column(db.String(150));                                      
-    trackDate = db.Column(db.DateTime(timezone=True), default=func.now());      
+    trackDate = db.Column(db.Date, default=date.today());  # year-month-day 
+                                                           # 2023-09-30
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"));           
 
     
