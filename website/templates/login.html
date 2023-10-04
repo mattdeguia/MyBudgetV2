@@ -1,45 +1,50 @@
+<!-- HTML Head: ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
 <!-- extend the base template and change title of page -->
 {% extends "base.html" %}
 {% block title %} Log In {% endblock %}
 
-<!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+<!-- HTML Body: ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
 {% block content%}
 
-    <!-- Create the login form -->
-    <div class="centered-form">
-    <div class="form-container">
-    <form method="POST">
-        <h3 align="center">Login</h3>
-        <!-- email -->
-        <!-- NOTE: in name="email" it's used to get 'email' from the form -->
-        <div class="form-group">
-            <label for="email">Email Address</label>
-            <input
-                type="email"
-                class="form-control"
-                id="email"
-                name="email"
-                placeholder="Enter email"
-            />
-        </div>
-        <br>
-        <!-- pw -->
-        <div class="form-group">
-            <label for="password">Password</label>
-            <input
-                type="password"
-                class="form-control"
-                id="password"
-                name="password"
-                placeholder="Enter password"
-            />
-        </div>
-        <br>
-        <br>
-        <!-- button -->
-        <button type="submit" class="btn btn-primary">Login</button>
-    </form>
+    <div class="header-container">
+        <h1>Login</h1>
     </div>
+    
+    <!-- Create the login form -->
+    <div class="container">
+        <div class="form-container">
+            <form method="POST">
+                <!-- email -->
+                <!-- NOTE: in name="email" it's used to get 'email' from the form -->
+                <div class="form-group">
+                    <label for="email">Email Address:</label>
+                    <input
+                        type="email"
+                        class="form-control"
+                        id="email"
+                        name="email"
+                        placeholder="Enter email"
+                    />
+                </div>
+                <br>
+
+                <!-- pw -->
+                <div class="form-group">
+                    <label for="password">Password:</label>
+                    <input
+                        type="password"
+                        class="form-control"
+                        id="password"
+                        name="password"
+                        placeholder="Enter password"
+                    />
+                </div>
+                <br>
+                <br>
+                <!-- button -->
+                <button type="submit" class="btn btn-primary">Login</button>
+            </form>
+        </div>
     </div>
 
     <br>

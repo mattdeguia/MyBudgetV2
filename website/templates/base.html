@@ -14,26 +14,79 @@
     >
 
     <style>
-        /* Custom CSS for centering and adding a border */
-        .centered-form {
+        /* ---------------------------------------------- */
+        /* General container */
+        
+        .container {
             display: flex;
             justify-content: center;
-            align-items: center;
-            min-height: 30vh;
+            padding: 0px;
+            margin: 50px;
+        }
+        
+        .container2 {
+            display: flex;
+            justify-content: center;
+            padding: 0px;
+            margin: 0px;
         }
 
+        .header-container {
+            display: flex;
+            justify-content: center;
+            padding: 0px;
+            margin-top: 50px;
+        }
+
+        .body-container {
+            text-align: center;
+        }
+
+        /* General-Form container */
         .form-container {
-            border: 1px solid black; /* Add a border around the form */
+            border: 1px solid powderblue; /* Add a border around the form */
+            border-radius: 20px;
+            width: 450px;
+            background-color: powderblue;
             padding: 20px;
-            margin: 40px;
-            max-width: 500px; /* Adjust the maximum width as needed */
-            width: 100%;
         }
 
         /* ---------------------------------------------- */
+        /* Apply styles to the entire table */
+        .table-container {
+            border-collapse: collapse; /* Merge cell borders */
+            width: fit-content;
+            border: 1px solid black;
+        }
+
+        /* Style table headers */
+        .table-container th {
+            background-color: #333; /* Header background color */
+            color: #fff; /* Header text color */
+            padding: 20px;
+            /* change width of table */
+            width: 270px
+        }
+
+        /* Style table rows */
+        .table-container tr:nth-child(even) {
+            background-color: #f2f2f2; /* Alternate row background color */
+        }
+
+        .table-container tr:hover {
+            background-color: #ddd; /* Hovered row background color */
+        }
+
+        /* Style table data cells */
+        .table-container td {
+            padding: 10px; /* Data cell padding */
+            border-bottom: 1px solid #ddd; /* Bottom border for cells */
+        }
+
         /* Style the container for the scrollable list */
         .scrollable-list {
-            max-height: 300px; /* Set the maximum height for the scrollable list */
+            /* change height for the table */
+            max-height: 300px;
             overflow-y: auto; /* Enable vertical scrolling if content overflows */
         }
 
@@ -51,38 +104,18 @@
         }
 
         /* ---------------------------------------------- */
-        /* Apply styles to the entire table */
-        .styled-table {
+        /* Apply style to graph */
+        .graph-container {
+            border: 1px solid silver;
             border-collapse: collapse; /* Merge cell borders */
-            width: 100%; /* Make the table occupy the full width of its container */
+            width: fit-content;
         }
 
-        /* Style table headers */
-        .styled-table th {
-            background-color: #333; /* Header background color */
-            color: #fff; /* Header text color */
-            padding: 20px;
-            padding-right: 200px;
-        }
-
-        /* Style table rows */
-        .styled-table tr:nth-child(even) {
-            background-color: #f2f2f2; /* Alternate row background color */
-        }
-
-        .styled-table tr:hover {
-            background-color: #ddd; /* Hovered row background color */
-        }
-
-        /* Style table data cells */
-        .styled-table td {
-            padding: 20px; /* Data cell padding */
-            border-bottom: 1px solid #ddd; /* Bottom border for cells */
-        }
     </style>
 
     <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
-    <title>{% block title %} placeholder {% endblock %}</title>
+    <title>{% block title %} {% endblock %}</title>
+    {% block chart %} {% endblock %}
 </head>
 
 
@@ -159,7 +192,7 @@
 
     <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
     <!-- this content will be changed within other templates -->
-    {% block content %} placeholder {% endblock%}
+    {% block content %} {% endblock%}
 
 
 </body>

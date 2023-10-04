@@ -17,7 +17,7 @@ views = Blueprint("views", __name__);
 
 
 # ------------------------------------------------------------------------------
-# takes user to the home page
+# direct user to the home page
 @views.route('/')                               
 def home():
     # *****NOTE: the "user" in the return statement refers to the "User" class in "models.py"                                         
@@ -56,21 +56,32 @@ def daily():
 @views.route('/overall', methods=["GET", "POST"])
 @login_required
 def overall():
-    # automatically set this variable to nothing
-    db_user_expenses = [None];
+    # --------------------------------------------------------
+    # set variables upon page landing
+    db_user_expenses_table = [None];
+    db_user_expenses_chart = {"Category": "Price"};
+    db_total = 0;
+    form_submitted = False;
 
+    # --------------------------------------------------------
     if (request.method == "POST"):
         # get options from user
         form_option_date = request.form.get("date_filter");
         form_option_category = request.form.get("category_filter")
-        
+
+        # --------------------------------------------------------
         # if user didn't choose options from drop-down menu's, flash message
         if (form_option_date == None and form_option_category == None):
             flash("Please choose options!", category="error");
             return render_template("overall.html", user=current_user);
     
+        # --------------------------------------------------------
         # if they did, get drop-down menu values from the user
         else:
+            # set the flag to show user has submitted the form
+            # this is flag is used as an indicator to show what categories the user chose
+            form_submitted = True;
+
             # get date values
             current_date = datetime.now();
 
@@ -95,17 +106,78 @@ def overall():
 
 
 
+
+
+
+
+
             # --------------------------------------------------------
             # show expenses from all time, from all categories
             if (form_option_date == "all" and form_option_category == "all"):
-                db_user_expenses = Expense.query.filter_by(user_id=current_user.id);
-                return render_template("overall.html", user=current_user, expenses=db_user_expenses);
+                db_user_expenses_table = Expense.query.filter_by(user_id=current_user.id);
+
+                # NOTE: for google's pie chart, the data needs to be sorted as follows:
+                #   ["string", "string"] for the first column
+                #   ["string", integer] for the rest of the rows
+                chartQuery = [Expense.category, Expense.price];
+                result = db.session.query(*chartQuery).filter(Expense.user_id==current_user.id).all();
+                db_user_expenses_chart = get_chart_data(db_user_expenses_chart, result);
+
+                # get total sum from chart
+                db_total = get_total_price_from_chart(db_user_expenses_chart, db_total);
+
+                # change form_option_date and form_option_category into different strings
+                form_option_date = "All Expenses";
+                form_option_category = "All Categories"
+
+                return render_template("overall.html", 
+                                       user=current_user, 
+                                       expenses=db_user_expenses_table, 
+                                       chart_data=db_user_expenses_chart, 
+                                       total=db_total,
+                                       form_submitted=form_submitted,
+                                       form_option_date=form_option_date,
+                                       form_option_category=form_option_category);
         
+
             # show expenses from all time, and from a specific category
             elif (form_option_date == "all" and form_option_category != "all"):
-                db_user_expenses = Expense.query.filter_by(category=form_option_category, user_id=current_user.id);
-                return render_template("overall.html", user=current_user, expenses=db_user_expenses);
+                db_user_expenses_table = Expense.query.filter_by(category=form_option_category, user_id=current_user.id);
+
+                chartQuery = [Expense.category, Expense.price];
+                result = db.session.query(*chartQuery).filter(Expense.category==form_option_category, Expense.user_id==current_user.id).all();
+                db_user_expenses_chart = get_chart_data(db_user_expenses_chart, result);
+
+                db_total = get_total_price_from_chart(db_user_expenses_chart, db_total);
+
+                # change form_option_date and form_option_category into different strings
+                form_option_date = "All Expenses";
+                category_descriptions = {
+                    "gas": "the Gas Category",
+                    "car_stuff": "the Car Stuff Category",
+                    "streaming_services": "the Streaming Services Category",
+                    "rent": "the Rent Category",
+                    "utilities": "the Utilities Category",
+                    "internet": "the Internet Category",
+                    "groceries": "the Groceries Category",
+                    "food_and_drinks": "the Food and Drinks Category",
+                    "other": "the Other Category"
+                }
+                form_option_category = category_descriptions.get(form_option_category, "an Unknown Category")
             
+                return render_template("overall.html", 
+                                       user=current_user, 
+                                       expenses=db_user_expenses_table, 
+                                       chart_data=db_user_expenses_chart, 
+                                       total=db_total,
+                                       form_submitted=form_submitted,
+                                       form_option_date=form_option_date,
+                                       form_option_category=form_option_category);
+
+
+
+
+
 
 
 
@@ -113,13 +185,63 @@ def overall():
             # --------------------------------------------------------
             # show expenses from the current week, from all categories
             if (form_option_date == "week" and form_option_category == "all"):
-                db_user_expenses = Expense.query.filter(and_(Expense.trackDate >= start_week, Expense.trackDate <= end_week, Expense.user_id == current_user.id)).all();
-                return render_template("overall.html", user=current_user, expenses=db_user_expenses);
+                db_user_expenses_table = Expense.query.filter(and_(Expense.trackDate >= start_week, Expense.trackDate <= end_week, Expense.user_id == current_user.id)).all();
+
+                chartQuery = [Expense.category, Expense.price];
+                result = db.session.query(*chartQuery).filter(and_(Expense.trackDate >= start_week, Expense.trackDate <= end_week, Expense.user_id==current_user.id)).all();
+                db_user_expenses_chart = get_chart_data(db_user_expenses_chart, result);
+
+                db_total = get_total_price_from_chart(db_user_expenses_chart, db_total);
+
+                # change form_option_date and form_option_category into different strings
+                form_option_date = "This Week's Expenses";
+                form_option_category = "All Categories"
+
+                return render_template("overall.html", 
+                                       user=current_user, 
+                                       expenses=db_user_expenses_table, 
+                                       chart_data=db_user_expenses_chart, 
+                                       total=db_total,
+                                       form_submitted=form_submitted,
+                                       form_option_date=form_option_date,
+                                       form_option_category=form_option_category);
         
             # show expenses from the current week, from a specific categories
             elif (form_option_date == "week" and form_option_category != "all"):
-                db_user_expenses = Expense.query.filter(and_(Expense.category == form_option_category, Expense.trackDate >= start_week, Expense.trackDate <= end_week, Expense.user_id == current_user.id)).all();
-                return render_template("overall.html", user=current_user, expenses=db_user_expenses);
+                db_user_expenses_table = Expense.query.filter(and_(Expense.category == form_option_category, Expense.trackDate >= start_week, Expense.trackDate <= end_week, Expense.user_id == current_user.id)).all();
+                
+                chartQuery = [Expense.category, Expense.price];
+                result = db.session.query(*chartQuery).filter(and_(Expense.category==form_option_category, Expense.trackDate >= start_week, Expense.trackDate <= end_week, Expense.user_id==current_user.id)).all();
+                db_user_expenses_chart = get_chart_data(db_user_expenses_chart, result);
+
+                db_total = get_total_price_from_chart(db_user_expenses_chart, db_total);   
+
+                # change form_option_date and form_option_category into different strings
+                form_option_date = "This Week's Expenses";
+                category_descriptions = {
+                    "gas": "the Gas Category",
+                    "car_stuff": "the Car Stuff Category",
+                    "streaming_services": "the Streaming Services Category",
+                    "rent": "the Rent Category",
+                    "utilities": "the Utilities Category",
+                    "internet": "the Internet Category",
+                    "groceries": "the Groceries Category",
+                    "food_and_drinks": "the Food and Drinks Category",
+                    "other": "the Other Category"
+                }
+                form_option_category = category_descriptions.get(form_option_category, "an Unknown Category")
+                
+                return render_template("overall.html", 
+                                       user=current_user, 
+                                       expenses=db_user_expenses_table, 
+                                       chart_data=db_user_expenses_chart, 
+                                       total=db_total,
+                                       form_submitted=form_submitted,
+                                       form_option_date=form_option_date,
+                                       form_option_category=form_option_category);
+
+
+
 
 
 
@@ -129,14 +251,65 @@ def overall():
             # --------------------------------------------------------
             # show expenses from the current month, from all categories
             if (form_option_date == "month" and form_option_category == "all"):
-                db_user_expenses = Expense.query.filter(and_(Expense.trackDate >= start_month, Expense.trackDate <= end_month, Expense.user_id == current_user.id)).all();
-                return render_template("overall.html", user=current_user, expenses=db_user_expenses);
-        
+                db_user_expenses_table = Expense.query.filter(and_(Expense.trackDate >= start_month, Expense.trackDate <= end_month, Expense.user_id == current_user.id)).all();
+
+                chartQuery = [Expense.category, Expense.price];
+                result = db.session.query(*chartQuery).filter(and_(Expense.trackDate >= start_month, Expense.trackDate <= end_month, Expense.user_id==current_user.id)).all();
+                db_user_expenses_chart = get_chart_data(db_user_expenses_chart, result);
+
+                db_total = get_total_price_from_chart(db_user_expenses_chart, db_total);
+
+                # change form_option_date and form_option_category into different strings
+                form_option_date = "This Month's Expenses";
+                form_option_category = "All Categories"
+
+
+                return render_template("overall.html", 
+                                       user=current_user, 
+                                       expenses=db_user_expenses_table, 
+                                       chart_data=db_user_expenses_chart, 
+                                       total=db_total,
+                                       form_submitted=form_submitted,
+                                       form_option_date=form_option_date,
+                                       form_option_category=form_option_category);
+                
             # show expenses from the current month, from a specific categories
             elif (form_option_date == "month" and form_option_category != "all"):
-                db_user_expenses = Expense.query.filter(and_(Expense.category == form_option_category, Expense.trackDate >= start_month, Expense.trackDate <= end_month, Expense.user_id == current_user.id)).all();
-                return render_template("overall.html", user=current_user, expenses=db_user_expenses);
-            
+                db_user_expenses_table = Expense.query.filter(and_(Expense.category == form_option_category, Expense.trackDate >= start_month, Expense.trackDate <= end_month, Expense.user_id == current_user.id)).all();
+                
+                chartQuery = [Expense.category, Expense.price];
+                result = db.session.query(*chartQuery).filter(and_(Expense.category == form_option_category, Expense.trackDate >= start_month, Expense.trackDate <= end_month, Expense.user_id==current_user.id)).all();
+                db_user_expenses_chart = get_chart_data(db_user_expenses_chart, result);
+
+                db_total = get_total_price_from_chart(db_user_expenses_chart, db_total);
+
+                # change form_option_date and form_option_category into different strings
+                form_option_date = "This Month's Expenses";
+                category_descriptions = {
+                    "gas": "the Gas Category",
+                    "car_stuff": "the Car Stuff Category",
+                    "streaming_services": "the Streaming Services Category",
+                    "rent": "the Rent Category",
+                    "utilities": "the Utilities Category",
+                    "internet": "the Internet Category",
+                    "groceries": "the Groceries Category",
+                    "food_and_drinks": "the Food and Drinks Category",
+                    "other": "the Other Category"
+                }
+                form_option_category = category_descriptions.get(form_option_category, "an Unknown Category")
+
+                return render_template("overall.html", 
+                                       user=current_user, 
+                                       expenses=db_user_expenses_table, 
+                                       chart_data=db_user_expenses_chart, 
+                                       total=db_total,
+                                       form_submitted=form_submitted,
+                                       form_option_date=form_option_date,
+                                       form_option_category=form_option_category);
+
+
+
+
 
 
 
@@ -145,12 +318,112 @@ def overall():
             # --------------------------------------------------------
             # show expenses from the current year, from all categories
             if (form_option_date == "year" and form_option_category == "all"):
-                db_user_expenses = Expense.query.filter(and_(Expense.trackDate >= start_year, Expense.trackDate <= end_year, Expense.user_id == current_user.id)).all();
-                return render_template("overall.html", user=current_user, expenses=db_user_expenses);
-        
+                db_user_expenses_table = Expense.query.filter(and_(Expense.trackDate >= start_year, Expense.trackDate <= end_year, Expense.user_id == current_user.id)).all();
+
+                chartQuery = [Expense.category, Expense.price];
+                result = db.session.query(*chartQuery).filter(and_(Expense.trackDate >= start_year, Expense.trackDate <= end_year, Expense.user_id==current_user.id)).all();
+                db_user_expenses_chart = get_chart_data(db_user_expenses_chart, result);
+
+                db_total = get_total_price_from_chart(db_user_expenses_chart, db_total);
+
+                # change form_option_date and form_option_category into different strings
+                form_option_date = "This Year's Expenses";
+                form_option_category = "All Categories"
+
+                return render_template("overall.html", 
+                                       user=current_user, 
+                                       expenses=db_user_expenses_table, 
+                                       chart_data=db_user_expenses_chart, 
+                                       total=db_total,
+                                       form_submitted=form_submitted,
+                                       form_option_date=form_option_date,
+                                       form_option_category=form_option_category);
+                
             # show expenses from the current year, from a specific categories
             elif (form_option_date == "year" and form_option_category != "all"):
-                db_user_expenses = Expense.query.filter(and_(Expense.category == form_option_category, Expense.trackDate >= start_year, Expense.trackDate <= end_year, Expense.user_id == current_user.id)).all();
-                return render_template("overall.html", user=current_user, expenses=db_user_expenses);
+                db_user_expenses_table = Expense.query.filter(and_(Expense.category == form_option_category, Expense.trackDate >= start_year, Expense.trackDate <= end_year, Expense.user_id == current_user.id)).all();
+                
+                chartQuery = [Expense.category, Expense.price];
+                result = db.session.query(*chartQuery).filter(and_(Expense.category == form_option_category, Expense.trackDate >= start_month, Expense.trackDate <= end_month, Expense.user_id==current_user.id)).all();
+                db_user_expenses_chart = get_chart_data(db_user_expenses_chart, result);
 
-    return render_template("overall.html", user=current_user, expenses=db_user_expenses);
+                db_total = get_total_price_from_chart(db_user_expenses_chart, db_total);
+
+                # change form_option_date and form_option_category into different strings
+                form_option_date = "This Year's Expenses";
+                category_descriptions = {
+                    "gas": "the Gas Category",
+                    "car_stuff": "the Car Stuff Category",
+                    "streaming_services": "the Streaming Services Category",
+                    "rent": "the Rent Category",
+                    "utilities": "the Utilities Category",
+                    "internet": "the Internet Category",
+                    "groceries": "the Groceries Category",
+                    "food_and_drinks": "the Food and Drinks Category",
+                    "other": "the Other Category"
+                }
+                form_option_category = category_descriptions.get(form_option_category, "an Unknown Category")
+               
+                return render_template("overall.html", 
+                                       user=current_user, 
+                                       expenses=db_user_expenses_table, 
+                                       chart_data=db_user_expenses_chart, 
+                                       total=db_total,
+                                       form_submitted=form_submitted,
+                                       form_option_date=form_option_date,
+                                       form_option_category=form_option_category);
+
+    return render_template("overall.html", 
+                           user=current_user, 
+                           expenses=db_user_expenses_table, 
+                           chart_data=db_user_expenses_chart, 
+                           total=db_total,
+                           form_submitted=form_submitted);
+
+
+
+
+
+
+
+
+
+
+def get_chart_data(db_user_expenses_chart, result):
+    # create dictionary to store the summed values for each category
+    category_sums = {
+        "gas": 0,
+        "car_stuff": 0,
+        "streaming": 0,
+        "rent": 0,
+        "utilities": 0,
+        "internet": 0,
+        "groceries": 0,
+        "food_and_drinks": 0,
+        "other": 0
+    }
+
+    # iterate through the result and sum values for each category
+    for val in result:
+        category, price = val
+        if (category in category_sums):
+            category_sums[category] += int(price);
+    
+    # convert the dirctionary into a list of tuples
+    newResult = list(category_sums.items())
+    for item in newResult:
+        category = item[0]
+        price = item[1]
+        db_user_expenses_chart[category] = price
+
+    # then return the updated db_user_expenses_chart
+    return db_user_expenses_chart;
+
+def get_total_price_from_chart(db_user_expenses_chart, db_total):
+    for key in db_user_expenses_chart:
+        val = db_user_expenses_chart[key];
+        if (isinstance(val, str)):
+            pass;
+        else:
+            db_total += int(val);
+    return db_total;

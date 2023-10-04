@@ -30,9 +30,7 @@ def create_app():
 
 
     # +++++++++++++++++++++++++++++++++++++++++++++++ 
-    # 3c. Import adn register the blueprints (aka routes aka webpages) from "views.py" and "auth.py"
-    # The "." in ".views" says that we are getting it from the "views.py" file that's in the same folder
-    # NOTE: In Flask, a "view" refers to a Python function that handles an HTTP request and returns an HTTP response
+    # 3c. Import and register the blueprints (routes/views) from "views.py" and "auth.py"
     from .views import views
     from .auth import auth
     app.register_blueprint(views, url_prefix="/");
@@ -44,7 +42,7 @@ def create_app():
 
 
     # +++++++++++++++++++++++++++++++++++++++++++++++ 
-    # 3d. import the entities from "models.py"
+    # 3d. import the database schema from "models.py"
     from .models import User, Expense;
 
     # The app.app_context() function call creates a context manager that allows you 

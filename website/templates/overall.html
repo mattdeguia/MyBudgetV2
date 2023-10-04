@@ -1,77 +1,120 @@
+<!-- HTML Head: ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
 <!-- extend the base template and change title of page -->
 {% extends "base.html" %}
 {% block title %} Overall {% endblock %}
 
-<!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+{% block chart%}
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript">
+
+    google.charts.load('current', {'packages':['corechart']});
+    google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+            {% for category, price in chart_data.items() %}
+                {% if price is string %}
+                    [ "{{ category }}", "{{ price }}" ],
+                {% else %}
+                    [ "{{ category }}", {{ price }} ],
+                {% endif %}
+            {% endfor %}
+        ]);
+
+        // create the chart
+        var options = {
+            title: 'Your Spending Habits:', 
+            is3D: true,
+        };
+        var chart = new google.visualization.PieChart(document.getElementById('piechart_3d'));
+        chart.draw(data, options);
+    }
+
+</script>
+{% endblock %}
+
+<!-- HTML Body: ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
 {% block content %}
 
-    <h1 align="center">View Money Spent:</h1>
-
-    <!-- table that displays user expenses -->
-    <div class="scrollable-list">
-    <div class="centered-form">
-    <div class="styled-table">
-        <table align="center">
-            <!-- table head -->
-            <thead>
-                <tr>
-                    <th>Price:</th>
-                    <th>Category:</th>
-                    <th>Date:</th>
-                </tr>
-            </thead>
-            <!-- populated table rows -->
-            <tbody>
-                {% for each_expense in expenses %}
-                <tr>
-                    <td> ${{ each_expense.price }}     </td>
-                    <td>  {{ each_expense.category }}  </td>
-                    <td>  {{ each_expense.trackDate }} </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+    <div class="header-container">
+        <h1>View Money Spent: ${{ total }}</h1>
     </div>
-    </div>
+    
+    <div class="container2">
+        {% if form_submitted %}
+            <h6>Showing Results For: {{ form_option_date }} in {{ form_option_category }}</h6>
+        {% endif %}
     </div>
 
+    <!-- table that displays user expenses -->    
+    <div class="container">
+        <div class="table-container">
+            <div class="scrollable-list">
+                <table>
+                    <!-- table head -->
+                    <thead>
+                        <tr>
+                            <th>Price:</th>
+                            <th>Category:</th>
+                            <th>Date:</th>
+                        </tr>
+                    </thead>
+                    <!-- populated table rows, showing the most recent expense at the top -->
+                    <tbody>
+                        {% for each_expense in expenses | reverse %}
+                        <tr>
+                            <td> ${{ each_expense.price }}     </td>
+                            <td>  {{ each_expense.category }}  </td>
+                            <td>  {{ each_expense.trackDate }} </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <div class="container">
+        <div class="graph-container">
+            <div id="piechart_3d" style="width:800px; height:300px;"></div>
+        </div>
+    </div>
 
-    <div class="centered-form">
-    <div class="form-container">
-        <form method="POST">
-            <!-- drop down menu, ask user what date to view -->
-            <label for="date_filter">Select Date:</label>
-            <select class="form-control" id="date_filter" name="date_filter">
-                <option value="" selected disabled></option>
-                <option value="all">All Time</option>
-                <option value="week">This Week</option>
-                <option value="month">This Month</option>
-                <option value="year">This Year</option>
-            </select>
-            <br>
-            <!-- drop down menu, ask user what category to view -->
-            <label for="category_filter">Select Category:</label>
-            <select class="form-control" id="category_filter" name="category_filter">
-                <option value="" selected disabled></option>
-                <option value="all">All</option>
-                <option value="gas">Gas</option>
-                <option value="car_stuff">Car Stuff</option>
-                <option value="streaming">Streaming Services</option>
-                <option value="rent">Rent</option>
-                <option value="utilities">Utilities</option>
-                <option value="internet">Internet</option>
-                <option value="groceries">Groceries</option>
-                <option value="food_and_drinks">Food and Drinks</option>
-                <option value="other_ne">Other (Necessary Expense)</option>
-                <option value="other_ttm">Other (To Treat Myself)</option>
-                <option value="other_ttop">Other (To Treat Other People)</option>
-            </select>
-            <br>
-            <!-- button -->
-            <button type="submit" class="btn btn-primary">Submit</button>
-        </form>
+    <div class="container">
+        <div class="form-container">
+            <form method="POST">
+                <!-- drop down menu, ask user what date to view -->
+                <label for="date_filter">Select From:</label>
+                <select class="form-control" id="date_filter" name="date_filter">
+                    <option value="" selected disabled></option>
+                    <option value="all">All Time</option>
+                    <option value="week">This Week</option>
+                    <option value="month">This Month</option>
+                    <option value="year">This Year</option>
+                </select>
+                <br>
+                <!-- drop down menu, ask user what category to view -->
+                <label for="category_filter">Select Category:</label>
+                <select class="form-control" id="category_filter" name="category_filter">
+                    <option value="" selected disabled></option>
+                    <option value="all">All</option>
+                    <option value="gas">Gas</option>
+                    <option value="car_stuff">Car Stuff</option>
+                    <option value="streaming">Streaming Services</option>
+                    <option value="rent">Rent</option>
+                    <option value="utilities">Utilities</option>
+                    <option value="internet">Internet</option>
+                    <option value="groceries">Groceries</option>
+                    <option value="food_and_drinks">Food and Drinks</option>
+                    <option value="other">Other</option>
+                </select>
+                <br>
+                <!-- button -->
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
     </div>
-    </div>
+
     
 {% endblock %}
 

@@ -1,17 +1,31 @@
+<!-- HTML Head: ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
 <!-- extend the base template and change title of page -->
 {% extends "base.html" %}
 {% block title %} Home {% endblock %}
 
-<!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+<!-- HTML Body: ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
 {% block content%}
 
     {% if user.is_authenticated %}
-        <h1 align="center">Hello, {{user.first_name}}!</h1>
+        <div class="header-container">
+            <br>
+            <h1>Welcome back, {{user.first_name}}!</h1>
+        </div>
     {% else %}
-        <h1 align="center">Welcome!</h1>
+        <div class="body-container">
+        </div>
     {% endif %}
 
-    <br>
-    <h3 align="center">My Budget (Version 2)</h3>
+    <div class="header-container">
+        <br>
+        <h3>My Budget (Version 2)</h3>
+        <br>
+    </div>
+
+    <div class="body-container">
+        <br>
+        <p>The purpose of this website is to help you track all of your money.</p>
+        <br>
+    </div>
 
 {% endblock %}
