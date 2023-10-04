@@ -28,7 +28,7 @@ def create_app():
     #app.config['SQLALCHEMY_DATABASE_URI'] = f"sqlite:///{DB_NAME}";       # create a sqlite database and store it in the ~/website folder
 
     # New Remote Database connection to heroku:
-    app.config['SQLALCHEMY_DATABASE_URI'] = f"postgres://gufuuhkjwbflau:daa84cc9b91b9043e5ee1daef0eb8c93214d6202410e0dbf3012b5348c6340ac@ec2-35-169-9-79.compute-1.amazonaws.com:5432/dddh1g8c82na2p"; 
+    app.config['SQLALCHEMY_DATABASE_URI'] = f"postgresql://gufuuhkjwbflau:daa84cc9b91b9043e5ee1daef0eb8c93214d6202410e0dbf3012b5348c6340ac@ec2-35-169-9-79.compute-1.amazonaws.com:5432/dddh1g8c82na2p"; 
     
     # initialize our database for our app
     db.init_app(app);                                                    
