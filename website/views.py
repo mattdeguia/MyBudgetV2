@@ -103,21 +103,13 @@ def overall():
             start_year = start_of_year.strftime("%Y-%m-%d");
             end_year = end_of_year.strftime("%Y-%m-%d");
 
-
-
-
-
-
-
-
-
             # --------------------------------------------------------
             # show expenses from all time, from all categories
             if (form_option_date == "all" and form_option_category == "all"):
                 db_user_expenses_table = Expense.query.filter_by(user_id=current_user.id);
 
                 # NOTE: for google's pie chart, the data needs to be sorted as follows:
-                #   ["string", "string"] for the first column
+                #   ["string", "string"] for the first row
                 #   ["string", integer] for the rest of the rows
                 chartQuery = [Expense.category, Expense.price];
                 result = db.session.query(*chartQuery).filter(Expense.user_id==current_user.id).all();
@@ -173,14 +165,6 @@ def overall():
                                        form_submitted=form_submitted,
                                        form_option_date=form_option_date,
                                        form_option_category=form_option_category);
-
-
-
-
-
-
-
-
 
             # --------------------------------------------------------
             # show expenses from the current week, from all categories

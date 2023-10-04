@@ -6,3 +6,4 @@ app = create_app();
 if __name__ == "__main__":
     app.run(debug=True);
 
+# in terminal, use "flask run" to run this application
