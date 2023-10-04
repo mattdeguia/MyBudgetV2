@@ -1,5 +1,6 @@
 # Import everything needed:
 from flask import Blueprint, render_template, request, flash, redirect, url_for;
+from werkzeug.security import generate_password_hash, check_password_hash;
 from flask_login import login_user, login_required, logout_user, current_user;
 
 from .models import User;
@@ -22,8 +23,7 @@ def login():
 
         # if email exists is in database, validate their password, then them in/redirect to home page
         if (user):
-            #if (check_password_hash(user.password, form_password)):
-            if ((user.password, form_password)):
+            if (check_password_hash(user.password, form_password)):
                 login_user(user, remember=True);
                 return redirect(url_for("views.home"));
             else:
@@ -76,8 +76,7 @@ def sign_up():
             # create new user
             new_user = User(email=form_email,
                             first_name=form_firstName,
-                            password=form_password1);
-                            #password=generate_password_hash(form_password1, method="sha256"));
+                            password=generate_password_hash(form_password1, method="sha256"));
             
             # add/commit the user to the database
             db.session.add(new_user);
