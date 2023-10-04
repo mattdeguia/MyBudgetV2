@@ -1,5 +1,5 @@
 blinker==1.6.2
-CacheControl==0.13.1
+#CacheControl==0.13.1
 cachetools==5.3.1
 certifi==2023.5.7
 cffi==1.16.0
