@@ -15,18 +15,17 @@ Project Idea:
 
 Tech Used:
     Python:
-        - main language used with all frameworks
+        - main language used with all frameworks/libraries/html/cass/javascript
     Flask and extensions (framework):
         - website framework for python
-        - flask_login (extension)
     Jinja (framework):
         - a separate templating framework usually used with Flask
         - renders templates and its content with "{% block content %} ... {% endblock %}"
         - can pass variables with "{{ data_used }}"
     Bootstrap (framework):
         - website framework for CSS
-    werkzeug.security (framework):
-	- ** NOTE: MUST BE Werkzeug ersion 2.2.2 to work with Flask Version 3.0.0
+    werkzeug.security (library):
+	    - ** NOTE: MUST BE Werkzeug ersion 2.2.2 to work with Flask Version 3.0.0
         - extension that helps use with authenticating users
 
 Problems and Solutions:
