@@ -8,7 +8,7 @@ from flask_sqlalchemy import SQLAlchemy         # import database module
 # ------------------------------------------------------------------------------
 # 2. create database object
 db = SQLAlchemy();
-#DB_NAME = "database.db";
+DB_NAME = "database.db";
 
 # ------------------------------------------------------------------------------
 # 3. create the application
@@ -25,11 +25,8 @@ def create_app():
     # this is the location of our database
 
     # Old Local Database:
-    #app.config['SQLALCHEMY_DATABASE_URI'] = f"sqlite:///{DB_NAME}";       # create a sqlite database and store it in the ~/website folder
+    app.config['SQLALCHEMY_DATABASE_URI'] = f"sqlite:///{DB_NAME}";       # create a sqlite database and store it in the ~/website folder
 
-    # New Remote Database connection to heroku:
-    app.config['SQLALCHEMY_DATABASE_URI'] = f"postgresql://gufuuhkjwbflau:daa84cc9b91b9043e5ee1daef0eb8c93214d6202410e0dbf3012b5348c6340ac@ec2-35-169-9-79.compute-1.amazonaws.com:5432/dddh1g8c82na2p"; 
-    
     # initialize our database for our app
     db.init_app(app);                                                    
 
